@@ -1,0 +1,790 @@
+/* ─── Fonts — self-hosted via @fontsource (npm) ──────────────────────────────
+   No external CDN request at runtime. Fonts are bundled with the static
+   export and served from shivalibajaj.github.io directly.
+   This eliminates the Google Fonts CDN attack surface entirely.           */
+@import "@fontsource/inter/300.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
+@import "@fontsource/inter/600.css";
+@import "@fontsource/inter/700.css";
+@import "@fontsource/merriweather/300.css";
+@import "@fontsource/merriweather/400.css";
+@import "@fontsource/merriweather/300-italic.css";
+@import "@fontsource/merriweather/400-italic.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Design tokens ──────────────────────────────────────────────────────────
+   Single source of truth — used in inline styles AND Tailwind classes.     */
+:root {
+  --bg:      #00003C;              /* deep navy */
+  --accent:  #4A9EFF;              /* medical blue */
+  --text:    #CCD6F6;              /* Brittany's primary text */
+  --muted:   #8892B0;              /* Brittany's muted text */
+  --surface: rgba(74,158,255,0.05);/* card hover background */
+  --border:  rgba(74,158,255,0.14);/* card hover border */
+
+  /* Signals to browsers + extensions: this site is intentionally dark.
+     Works with <meta name="color-scheme"> and data-darkreader-lock in
+     layout.tsx. Prevents Safari Reader, Firefox dark mode, OS forced-colors,
+     and Dark Reader from overriding the portfolio's colour palette.        */
+  color-scheme: dark;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────────────
+   Clean slate — no browser defaults leaking in.                            */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── HTML ───────────────────────────────────────────────────────────────────
+   scroll-behavior: smooth → clicking nav links scrolls smoothly.
+   NO overflow set here — setting overflow on html or body
+   silently breaks position:sticky in Safari (M1/M2 MacBooks).             */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ─── Body ───────────────────────────────────────────────────────────────────
+   NO overflow-x: hidden — this is the #1 cause of sticky breaking
+   on Safari. We handle horizontal overflow via the wrapper instead.        */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Font utilities ─────────────────────────────────────────────────────────
+   .font-heading → Merriweather (h1, h2, h3 in hero/cards)
+   .font-body    → Inter (everything else)                                  */
+.font-heading { font-family: 'Merriweather', Georgia, serif; }
+.font-body    { font-family: 'Inter', system-ui, sans-serif; }
+
+/* ─── Loading screen animations ──────────────────────────────────────────────
+   .l1  → first line fades in immediately
+   .l2  → second line fades in after 0.6s delay
+   .exit → whole screen fades out when dismissed                            */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+.l1   { animation: fadeIn  0.7s ease         forwards; }
+.l2   { opacity: 0; animation: fadeIn  0.6s ease 0.6s forwards; }
+.exit { animation: fadeOut 0.5s ease         forwards; }
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────────
+   Thin, subtle — matches Brittany's minimal scrollbar.                     */
+::-webkit-scrollbar       { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: rgba(74,158,255,0.2); border-radius: 2px; }
+
+/* ─── Focus ring ─────────────────────────────────────────────────────────────
+   Visible only on keyboard nav — accessibility requirement.                */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ─── Text selection ─────────────────────────────────────────────────────────
+   Blue tint when user selects text — small detail, big polish.             */
+::selection {
+  background: rgba(74, 158, 255, 0.25);
+  color: #CCD6F6;
+}
+
+/* ─── Horizontal overflow fix ────────────────────────────────────────────────
+   `overflow: clip` prevents horizontal scroll WITHOUT creating a new
+   stacking context — safe for sticky children unlike overflow:hidden.      */
+body > div {
+  overflow-x: clip;
+}
+
+/* ─── Cross-browser sticky layout system ─────────────────────────────────────
+   These classes are used by page.tsx and LeftPanel.tsx.
+   Tested rules for sticky to work on:
+   Chrome, Firefox, Safari (macOS + iOS), Edge, mobile browsers.           */
+
+/* Outer two-column wrapper */
+.layout-shell {
+  display: flex;
+  align-items: flex-start;   /* REQUIRED — flex-start lets sticky work     */
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px;
+  min-height: 100vh;
+}
+
+/* Sticky left panel — desktop only */
+.panel-left {
+  /* Sticky rules — all three lines needed together */
+  position: sticky;
+  top: 0;
+  height: 100vh;
+
+  /* Size */
+  width: 380px;
+  flex-shrink: 0;
+
+  /* Inner layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 96px 0 64px;
+  z-index: 3;
+
+  /* Firefox fix: explicit overflow visible so sticky isn't clipped */
+  overflow: visible;
+}
+
+/* Scrollable right column */
+.panel-right {
+  flex: 1;
+  min-width: 0;            /* prevents flex child from overflowing        */
+  padding: 96px 0 96px 96px;
+}
+
+/* ─── Tablet (768px – 1023px) ────────────────────────────────────────────── */
+@media (max-width: 1023px) {
+  .layout-shell {
+    padding: 0 32px;
+  }
+
+  .panel-left {
+    width: 300px;           /* narrower on tablet */
+    padding: 72px 0 48px;
+  }
+
+  .panel-right {
+    padding: 72px 0 72px 64px;
+  }
+}
+
+/* ─── Mobile (< 768px) ───────────────────────────────────────────────────────
+   Single column — left panel becomes a normal header, NOT sticky.
+   Sticky on mobile is bad UX — it eats half the screen height.            */
+@media (max-width: 767px) {
+  .layout-shell {
+    flex-direction: column;  /* stack vertically */
+    padding: 0 24px;
+  }
+
+  .panel-left {
+    position: relative;      /* override sticky on mobile */
+    height: auto;            /* no fixed height on mobile */
+    width: 100%;
+    padding: 48px 0 40px;
+  }
+
+  .panel-right {
+    padding: 0 0 64px 0;     /* no left padding on mobile */
+    width: 100%;
+  }
+}
+
+/* ─── Mobile left panel refinements ──────────────────────────────────────────
+   The .panel-left position:relative + height:auto is already set above.
+   These classes refine the individual elements inside the panel on mobile. */
+
+/* Nav is hidden on mobile — replaced by hamburger in Part 26 */
+.nav-desktop {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* Tagline max-width: none on mobile so it uses full column width */
+.panel-tagline {
+  max-width: 260px;
+  margin-bottom: 52px;
+}
+
+/* Social icons row stays visible on mobile */
+.panel-social {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+  /* Hide desktop nav — hamburger takes over in Part 26 */
+  .nav-desktop {
+    display: none;
+  }
+
+  /* Tagline spans full width on mobile */
+  .panel-tagline {
+    max-width: 100%;
+    margin-bottom: 32px;
+  }
+
+  /* Social icons appear directly below tagline on mobile */
+  .panel-social {
+    margin-bottom: 0;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet — tagline slightly wider than desktop */
+  .panel-tagline {
+    max-width: 220px;
+  }
+}
+
+/* ─── MobileNav ──────────────────────────────────────────────────────────────
+   Hidden on tablet/desktop, visible only on mobile.
+   Parts 26a–26e build this out progressively.                              */
+.mobile-nav {
+  display: none;   /* hidden on desktop + tablet */
+}
+
+@media (max-width: 767px) {
+  .mobile-nav {
+    display: block;  /* visible on mobile */
+    position: relative;
+  }
+}
+
+/* ─── Mobile menu animation ──────────────────────────────────────────────── */
+@keyframes mobileMenuIn {
+  from {
+    opacity:   0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity:   1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── About section — mobile ─────────────────────────────────────────────────
+   Desktop: maxWidth caps text at 520px for readability on wide screens.
+   Mobile:  maxWidth:100% so text fills the full column width.
+   The clamp() on font sizes already handles scaling — no font overrides needed. */
+
+.about-heading,
+.about-bio {
+  max-width: 520px;
+}
+
+.about-tags {
+  display:   flex;
+  flex-wrap: wrap;
+  gap:       8px;
+}
+
+@media (max-width: 767px) {
+  .about-heading {
+    /* Slightly more line height on mobile — text is smaller, needs more air */
+    line-height: 1.6 !important;
+  }
+
+  .about-heading,
+  .about-bio {
+    /* Remove cap — let text fill full mobile column */
+    max-width: 100%;
+  }
+
+  .about-tags span {
+    /* Slightly smaller tag text on mobile */
+    font-size: 11px !important;
+    padding:   4px 12px !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .about-heading,
+  .about-bio {
+    /* Tablet — slightly narrower than desktop */
+    max-width: 420px;
+  }
+}
+
+/* ─── Work section — mobile ──────────────────────────────────────────────────
+   Cards are already full-width block elements — no layout changes needed.
+   Mobile adjustments: tighter padding, smaller type badge, chips wrap well. */
+
+.project-card {
+  padding: 20px;
+}
+
+.project-card-type {
+  font-size:      11px;
+  letter-spacing: 0.14em;
+}
+
+.project-chip {
+  font-size: 11px;
+  padding:   3px 12px;
+}
+
+@media (max-width: 767px) {
+  .project-card {
+    /* Slightly less padding on mobile — more reading space */
+    padding: 16px;
+  }
+
+  .project-card-type {
+    /* Type badge smaller on mobile — less horizontal space */
+    font-size:      10px;
+    letter-spacing: 0.08em;
+  }
+
+  .project-chip {
+    /* Chips slightly tighter on mobile */
+    font-size: 10px;
+    padding:   2px 10px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .project-card {
+    padding: 18px;
+  }
+}
+
+/* ─── HowIThink section — mobile ─────────────────────────────────────────────
+   Principle rows: tighter padding + slightly smaller text on mobile.
+   The two-column layout (number | content) is preserved on all sizes —
+   it's too useful to collapse into a single column on mobile.              */
+
+.principle-row {
+  padding: 18px 20px;
+  gap:     20px;
+}
+
+.principle-number {
+  min-width: 24px;
+  flex-shrink: 0;
+}
+
+.principle-title {
+  font-size:     14px;
+  margin-bottom: 8px;
+}
+
+.principle-detail {
+  font-size: 13.5px;
+}
+
+.principle-intro {
+  max-width:     480px;
+  margin-bottom: 40px;
+}
+
+@media (max-width: 767px) {
+  .principle-row {
+    /* Tighter padding — more content visible on small screens */
+    padding: 14px 12px;
+    gap:     14px;
+  }
+
+  .principle-title {
+    /* Slightly smaller on mobile — still readable */
+    font-size:     13px;
+    margin-bottom: 6px;
+    line-height:   1.55;
+  }
+
+  .principle-detail {
+    font-size:   12.5px;
+    line-height: 1.8;
+  }
+
+  .principle-intro {
+    /* Full width on mobile */
+    max-width:     100%;
+    margin-bottom: 28px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .principle-row {
+    padding: 16px 16px;
+    gap:     16px;
+  }
+
+  .principle-intro {
+    max-width: 400px;
+  }
+}
+
+/* ─── Contact section — mobile ───────────────────────────────────────────────
+   Link rows: tighter padding on mobile.
+   Heading + description: remove maxWidth cap on mobile.
+   Footer: full width, slightly smaller text.                               */
+
+.contact-heading {
+  /* Uses clamp() for font size — no override needed */
+}
+
+.contact-description {
+  max-width:    440px;
+  margin-bottom: 44px;
+}
+
+.contact-row {
+  padding:       14px 20px;
+  margin-bottom: 4px;
+}
+
+.contact-footer {
+  max-width: 500px;
+}
+
+@media (max-width: 767px) {
+  .contact-description {
+    max-width:    100%;
+    margin-bottom: 32px;
+  }
+
+  .contact-row {
+    /* Reduce padding — more breathing room for value text */
+    padding:       12px 12px;
+    /* Stack label above value on very small screens */
+    flex-direction: column;
+    gap:            4px;
+    align-items:   flex-start;
+  }
+
+  .contact-footer {
+    max-width: 100%;
+    font-size: 11px !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .contact-description {
+    max-width: 360px;
+  }
+
+  .contact-footer {
+    max-width: 420px;
+  }
+}
+
+/* ─── SectionLabel — mobile ──────────────────────────────────────────────────
+   The sticky label already works on mobile — just needs tighter padding.   */
+
+.section-label-inner {
+  padding:       18px 0;
+  margin-bottom: 32px;
+}
+
+.section-label-text {
+  font-size:      11px;
+  letter-spacing: 0.14em;
+}
+
+@media (max-width: 767px) {
+  .section-label-inner {
+    /* Less vertical padding on mobile — save screen real estate */
+    padding:       14px 0;
+    margin-bottom: 24px;
+  }
+
+  .section-label-text {
+    /* Slightly tighter tracking on mobile */
+    letter-spacing: 0.1em;
+  }
+}
+
+/* ─── Global section spacing — mobile ───────────────────────────────────────
+   Sections have paddingBottom:100 on desktop.
+   On mobile, 100px is too much — tighten to 72px.                         */
+
+.section-about,
+.section-work,
+.section-how-i-think,
+.section-contact {
+  padding-bottom: 100px;
+}
+
+@media (max-width: 767px) {
+  .section-about,
+  .section-work,
+  .section-how-i-think,
+  .section-contact {
+    padding-bottom: 72px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .section-about,
+  .section-work,
+  .section-how-i-think,
+  .section-contact {
+    padding-bottom: 88px;
+  }
+}
+
+/* ─── Right panel spacing — mobile ──────────────────────────────────────────
+   panel-right already overrides padding on mobile (from Part 3).
+   This ensures the first section has breathing room below the left panel.  */
+@media (max-width: 767px) {
+  .panel-right {
+    padding-top: 48px;
+  }
+}
+
+/* ─── Body text scale — locked ───────────────────────────────────────────────
+   One source of truth for all body text sizes.
+   Applied via CSS classes so mobile overrides work via media queries.
+
+   Scale:
+   .body-lg   → 15px / 1.85  — primary body (About bio, section intros)
+   .body-md   → 14px / 1.8   — secondary body (card descriptions)
+   .body-sm   → 13.5px / 1.85 — tertiary body (principle details)
+   .body-xs   → 12px / 1.9   — footer text (smallest)                       */
+
+.body-lg {
+  font-family: 'Inter', sans-serif;
+  font-size:   15px;
+  font-weight: 400;
+  line-height: 1.85;
+  color:       #8892B0;
+}
+
+.body-md {
+  font-family: 'Inter', sans-serif;
+  font-size:   14px;
+  font-weight: 400;
+  line-height: 1.8;
+  color:       #8892B0;
+}
+
+.body-sm {
+  font-family: 'Inter', sans-serif;
+  font-size:   13.5px;
+  font-weight: 400;
+  line-height: 1.85;
+  color:       #8892B0;
+}
+
+.body-xs {
+  font-family: 'Inter', sans-serif;
+  font-size:   12px;
+  font-weight: 400;
+  line-height: 1.9;
+  color:       #8892B0;
+}
+
+@media (max-width: 767px) {
+  .body-lg { font-size: 14px; }
+  .body-md { font-size: 13px; }
+  .body-sm { font-size: 12.5px; }
+  .body-xs { font-size: 11px; }
+}
+
+/* ─── Spacing scale — locked ─────────────────────────────────────────────────
+   Documents the consistent spacing values used across the portfolio.
+   Not utility classes — just reference. Actual values applied inline.
+
+   4px   → gap between cards/rows (tight, hover border adds visual separation)
+   8px   → gap between tag pills
+   16px  → gap between body paragraphs
+   24px  → gap after section headings
+   28px  → footer border padding
+   32px  → SectionLabel margin-bottom (mobile: 24px)
+   40px  → intro paragraph margin-bottom in HowIThink
+   44px  → Contact description margin-bottom
+   48px  → major block separators (last bio → tags, link rows → footer)
+
+   Section padding-bottom:
+   Desktop  → 100px
+   Tablet   → 88px
+   Mobile   → 72px                                                           */
+
+/* ─── Typography rules — locked ──────────────────────────────────────────────
+
+   FONT ASSIGNMENT:
+   Merriweather (font-heading) → editorial moments only:
+     - About hero statement (h2)
+     - Contact "Let's work together." (h2)
+     - Project names in cards (h3)
+     - Principle titles in HowIThink
+     - "Genius at work." in LoadingScreen
+
+   Inter (font-body / default) → everything else:
+     - Name + role in LeftPanel (brand mark, not editorial)
+     - All nav items and labels
+     - All body paragraphs
+     - All chips and badges
+     - Footer text
+
+   SIZING RULES:
+   Only use clamp() on headings — body text uses fixed px sizes
+   overridden at breakpoints via .body-lg / .body-md / .body-sm classes.
+
+   WEIGHT RULES:
+   700 → name only (maximum weight, one element only)
+   600 → uppercase labels, chip text (medium emphasis)
+   500 → role/title (secondary identity text)
+   400 → all body text (neutral, readable)
+   300 → all headings (light weight = calm confidence)
+
+   NEVER use:
+   - font-weight 800+ (too heavy for this palette)
+   - font-style italic except in Merriweather for emphasis phrases
+   - text-decoration except on hover for links                             */
+
+/* ─── 375px (iPhone SE) — smallest supported target ─────────────────────────
+   Content width: 375 - 48px padding = 327px.
+   Fixes for elements that are tight or could overflow at this width.       */
+
+@media (max-width: 375px) {
+
+  /* Layout shell — tighter padding at 375px to gain 8px more content width */
+  .layout-shell {
+    padding: 0 20px;
+  }
+
+  /* Name — drop to minimum of clamp range */
+  /* clamp(28px,3vw,42px) at 375px = 11.25px → floored to 28px — already fine */
+
+  /* Tagline — ensure it wraps naturally, no overflow */
+  .panel-tagline {
+    max-width:   100%;
+    margin-bottom: 28px;
+  }
+
+  /* About tags — ensure chips don't cause horizontal scroll
+     "Medical Imaging & Computer Vision" at 12px ≈ 200px wide — fits ✅
+     But tighten gap slightly for neater wrapping at narrow width          */
+  .about-tags {
+    gap: 6px;
+  }
+
+  /* Work cards — tighter padding at 375px */
+  .project-card {
+    padding: 14px;
+  }
+
+  /* Type badge — allow wrap if text is very long */
+  .project-card-type {
+    max-width:  calc(100% - 28px);
+    word-break: break-word;
+  }
+
+  /* Chips — slightly smaller at 375px */
+  .project-chip {
+    font-size: 9.5px;
+    padding:   2px 9px;
+  }
+
+  /* Work subtitle */
+  .work-subtitle {
+    font-size: 10px;
+  }
+}
+
+.work-subtitle {
+  font-size: 11px;
+}
+
+/* Remaining 375px fixes — principle rows, contact, overflow */
+@media (max-width: 375px) {
+
+  /* HowIThink — reduce number column at 375px to give content more room
+     283px content area is fine, but 20px number saves 4px more            */
+  .principle-row {
+    padding: 12px 8px;
+    gap:     12px;
+  }
+
+  .principle-number {
+    min-width: 20px;
+  }
+
+  /* HowIThink intro — tighter bottom margin at 375px */
+  .principle-intro {
+    margin-bottom: 20px;
+  }
+
+  /* Contact heading — loosen line height at 375px
+     "Let's work together." at 24px needs breathing room when it wraps     */
+  .contact-heading {
+    line-height:   1.3 !important;
+    margin-bottom: 12px !important;
+  }
+
+  /* Contact description — tighter bottom margin */
+  .contact-description {
+    margin-bottom: 24px;
+  }
+
+  /* Contact row — email value could be long, ensure it wraps not overflows */
+  .contact-row {
+    padding: 10px 8px;
+  }
+
+  /* Footer — max-width already 100%, just ensure text wraps */
+  .contact-footer {
+    word-break: break-word;  /* breaks long URLs if needed */
+  }
+
+  /* Prevent ANY element from causing horizontal scroll */
+  .panel-right,
+  .section-about,
+  .section-work,
+  .section-how-i-think,
+  .section-contact {
+    overflow-x: hidden;
+  }
+}
+
+/* ─── 430px (iPhone 15 Pro Max) ──────────────────────────────────────────────
+   Content width: 430 - 48px = 382px — 55px more than iPhone SE.
+   All clamp() values are still at their mobile floor (vw too small to matter
+   until ~900px+). Mobile nav links scale naturally: 8vw = 34.4px ✅
+
+   Most elements are comfortable at 382px — only fine-tuning needed.        */
+
+@media (min-width: 376px) and (max-width: 430px) {
+
+  /* Tagline — can breathe more at 430px, restore normal margin */
+  .panel-tagline {
+    margin-bottom: 40px;
+  }
+
+  /* About tags — restore standard 8px gap (no longer cramped) */
+  .about-tags {
+    gap: 8px;
+  }
+
+  /* Domain tag chips — restore standard mobile size */
+  .about-tags span {
+    font-size: 11px !important;
+    padding:   5px 13px !important;
+  }
+
+  /* Project chips — restore standard mobile size */
+  .project-chip {
+    font-size: 11px;
+    padding:   3px 12px;
+  }
+
+  /* Principle rows — restore standard mobile padding */
+  .principle-row {
+    padding: 14px 12px;
+    gap:     14px;
+  }
+
+  /* Contact rows — restore standard mobile padding */
+  .contact-row {
+    padding: 12px 12px;
+  }
+}

@@ -1,0 +1,24 @@
+# ─── Dependabot ───────────────────────────────────────────────────────────────
+# Automatically opens PRs when npm dependencies have security updates.
+# Weekly check keeps the portfolio's dependencies current without noise.
+
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "09:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "security"
+    commit-message:
+      prefix: "chore(deps)"
+    ignore:
+      # Major version bumps need manual review — too risky to auto-update
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
