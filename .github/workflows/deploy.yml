@@ -1,19 +1,22 @@
 # ─── GitHub Pages Deployment ──────────────────────────────────────────────────
-# Triggers on every push to main.
-# Next.js builds a static export → uploaded to GitHub Pages automatically.
+# Runs on every push to main.
+# Builds the Next.js static export and publishes it to GitHub Pages.
 
 name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
-  workflow_dispatch:   # allows manual trigger from the Actions tab
+
+  # Allows manual trigger from the GitHub Actions tab
+  workflow_dispatch:
 
 permissions:
   contents: read
-  pages:    write
+  pages: write
   id-token: write
 
+# Only one deployment at a time
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -21,8 +24,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -35,12 +40,12 @@ jobs:
 
       - name: Build static export
         run: npm run build
-        # next.config.ts has output:"export" — writes to /out folder
+        # next.config.ts has output: "export" — this writes to /out
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./out
+          path: ./out   # Next.js static export folder
 
   deploy:
     needs: build
@@ -48,6 +53,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+
     steps:
       - name: Deploy to GitHub Pages
         id: deployment

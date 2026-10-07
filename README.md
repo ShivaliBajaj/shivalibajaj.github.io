@@ -1,36 +1,51 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shivali Bajaj — Portfolio
 
-## Getting Started
+Personal portfolio for **Shivali Bajaj**, Medical Data Scientist, India.  
+Live at: [shivalibajaj.github.io](https://shivalibajaj.github.io)
 
-First, run the development server:
+## Stack
+
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS + CSS custom properties
+- **Fonts**: Merriweather (headings) · Manrope (body)
+- **Deployment**: GitHub Pages via static export
+
+## Running locally
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# → http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Deploying
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Push to `main` — GitHub Actions builds and deploys automatically.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Before first deploy**, go to your GitHub repo:  
+`Settings → Pages → Source → GitHub Actions`
 
-## Learn More
+## What to update before deploying
 
-To learn more about Next.js, take a look at the following resources:
+1. `components/sections/Contact.tsx` — replace the placeholder email with your real one
+2. `components/sections/Work.tsx` — update GitHub URLs when repositories are public
+3. `public/` — add a profile image or favicon if desired
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Architecture
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/
+  layout.tsx        ← Root layout, metadata
+  page.tsx          ← Composes all sections
+  globals.css       ← Design tokens, fonts, base styles
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+components/
+  LoadingScreen.tsx ← 1.5s fade loading screen
+  Navbar.tsx        ← Fixed nav with scroll effect
+  sections/
+    Hero.tsx        ← Identity line + hero statement + domain tags
+    Work.tsx        ← AirAware, MindCare, placeholder
+    HowIThink.tsx   ← Ten locked working principles
+    Contact.tsx     ← Contact links + footer
+```

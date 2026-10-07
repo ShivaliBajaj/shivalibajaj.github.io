@@ -1,52 +1,30 @@
-"use client";
-
 /* ─── Work Section ───────────────────────────────────────────────────────────
-   Structure only in this part (15).
-   Content is added in:
-   ✅ Part 15 — shell, header, placeholder
-   ⏳ Part 16 — AirAware card
-   ⏳ Part 17 — MindCare card
-   ⏳ Part 18 — hover effects across both cards
+   Presents the two named projects + a placeholder.
+   Terminology is locked — clinical/research framing, no startup language.   */
 
-   Why a two-line section header?
-   Brittany's work section has a small label above the main heading —
-   "FEATURED PROJECTS" above "Things I've Built".
-   We mirror this pattern: a muted uppercase label + a larger heading.
-   It gives the section a clear visual entry point before the cards.
-
-   Card layout decision — vertical stack not grid:
-   Two cards side-by-side in a grid would make each card too narrow on
-   most laptop screens. A vertical stack gives each card full width —
-   more room for the description text and domain chips to breathe.        */
-
-import { SectionLabel } from "@/components/ui/SectionLabel";
-import { ProjectCard  } from "@/components/ui/ProjectCard";
-
-/* ── Project data — locked ───────────────────────────────────────────────── */
-export const PROJECTS = [
+/* Project data — content locked */
+const PROJECTS = [
   {
-    id:          "01",
     name:        "AirAware",
     type:        "Environmental Risk Analysis Framework",
     description:
-      "Environmental respiratory risk intelligence integrating medical " +
-      "imaging, environmental exposure analysis, and interpretable " +
-      "healthcare reasoning.",
+      "Environmental respiratory risk intelligence integrating medical imaging, " +
+      "environmental exposure analysis, and interpretable healthcare reasoning.",
     domains:     ["Medical Imaging", "Environmental Health Analytics", "Risk Modeling"],
     status:      "In Development",
-    githubUrl:   "https://github.com/ShivaliBajaj/airaware-lung-health-intelligence",
+    /* Replace with your actual GitHub URL when ready */
+    githubUrl:   "https://github.com/shivalibajaj/airaware",
   },
   {
-    id:          "02",
     name:        "MindCare",
     type:        "Clinical Language Intelligence System",
     description:
-      "Clinical language intelligence system for suicidality detection, " +
-      "escalation pattern analysis, and responsible healthcare AI " +
-      "interpretation.",
+      "Clinical language intelligence system for suicidality detection, escalation " +
+      "pattern analysis, and responsible healthcare AI interpretation.",
     domains:     ["Medical NLP", "Clinical Language Processing", "Healthcare ML"],
     status:      "In Development",
-    githubUrl:   "https://github.com/ShivaliBajaj/MindCare",
+    /* Replace with your actual GitHub URL when ready */
+    githubUrl:   "https://github.com/shivalibajaj/mindcare",
   },
 ];
 
@@ -54,85 +32,108 @@ export default function Work() {
   return (
     <section
       id="work"
-      className="section-work"
+      className="max-w-5xl mx-auto px-6 py-28"
     >
-      {/* Sticky label */}
-      <SectionLabel text="Work" />
-
-      {/* ── Section header — two lines like Brittany ──────────────────────
-          Small muted label sits above the main heading.
-          marginBottom: 48 gives breathing room before the first card.    */}
-      <div style={{ marginBottom: 48 }}>
-
-        {/* Muted uppercase label — "FEATURED PROJECTS" equivalent */}
+      {/* ── Section heading ───────────────────────────────────────────────── */}
+      <div className="mb-16">
         <p
-          className="work-subtitle"
-          style={{
-            fontFamily:    "'Inter', sans-serif",
-            fontWeight:    600,
-            letterSpacing: "0.14em",
-            textTransform: "uppercase",
-            color:         "#8892B0",
-            marginBottom:  8,
-          }}
+          className="font-body text-xs tracking-widest uppercase mb-3"
+          style={{ color: "#4A9EFF" }}
+        >
+          Work
+        </p>
+        <h2
+          className="font-heading font-light text-2xl md:text-3xl"
+          style={{ color: "#E8EDF4" }}
         >
           Systems &amp; Analytical Pipelines
-        </p>
-
+        </h2>
       </div>
 
-      {/* ── Cards — Parts 16 and 17 render here ─────────────────────────
-          display:flex + flexDirection:column stacks cards vertically.
-          gap:4 — tight spacing between cards; hover border adds
-          visual separation without needing extra margin.                 */}
-      <div style={{
-        display:       "flex",
-        flexDirection: "column",
-        gap:           4,
-        marginBottom:  4,
-      }}>
-        {/* AirAware card — Part 16 ✅ */}
-        <ProjectCard project={PROJECTS[0]} />
+      {/* ── Project cards ─────────────────────────────────────────────────── */}
+      <div className="grid md:grid-cols-2 gap-6 mb-6">
+        {PROJECTS.map((project) => (
+          <article
+            key={project.name}
+            className="flex flex-col p-8 rounded-sm border"
+            style={{
+              backgroundColor: "#00005A",
+              borderColor: "#0A0A6A",
+            }}
+          >
+            {/* Project type label */}
+            <p
+              className="font-body text-xs tracking-widest uppercase mb-4"
+              style={{ color: "#4A9EFF" }}
+            >
+              {project.type}
+            </p>
 
-        {/* MindCare card — Part 17 ✅ */}
-        <ProjectCard project={PROJECTS[1]} />
+            {/* Project name */}
+            <h3
+              className="font-heading font-light text-xl mb-4"
+              style={{ color: "#E8EDF4" }}
+            >
+              {project.name}
+            </h3>
+
+            {/* Description */}
+            <p
+              className="font-body text-sm font-light leading-relaxed mb-6 flex-grow"
+              style={{ color: "#B8C2D1" }}
+            >
+              {project.description}
+            </p>
+
+            {/* Domain tags */}
+            <div className="flex flex-wrap gap-2 mb-6">
+              {project.domains.map((d) => (
+                <span
+                  key={d}
+                  className="font-body text-xs px-2 py-1 rounded-sm border"
+                  style={{ color: "#B8C2D1", borderColor: "#1A3A6A", backgroundColor: "#00003C" }}
+                >
+                  {d}
+                </span>
+              ))}
+            </div>
+
+            {/* Footer: status + GitHub link */}
+            <div className="flex items-center justify-between">
+              <span
+                className="font-body text-xs tracking-wide"
+                style={{ color: "#B8C2D1" }}
+              >
+                ◎ {project.status}
+              </span>
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="font-body text-xs font-medium tracking-wide transition-colors duration-200"
+                style={{ color: "#4A9EFF" }}
+                onMouseEnter={(e) => (e.currentTarget.style.opacity = "0.7")}
+                onMouseLeave={(e) => (e.currentTarget.style.opacity = "1")}
+              >
+                View Repository →
+              </a>
+            </div>
+          </article>
+        ))}
       </div>
 
-      {/* ── Placeholder — "More systems in development." ─────────────────
-          Dashed border signals intentional empty space — not a bug.
-          Matches the clinical/research aesthetic: work is ongoing,
-          the portfolio is a living document.                             */}
-      <div style={{
-        display:        "flex",
-        alignItems:     "center",
-        gap:            14,
-        padding:        "18px 20px",
-        borderRadius:   8,
-        border:         "1px dashed rgba(74, 158, 255, 0.15)",
-        marginTop:      4,
-      }}>
-        <span style={{
-          display:    "inline-block",
-          width:      20,
-          borderTop:  "1px solid #8892B0",
-          flexShrink: 0,
-        }} />
-        <p style={{
-          fontFamily: "'Inter', sans-serif",
-          fontWeight: 400,
-          color:      "#8892B0",
-          margin:     0,
-        }}>
+      {/* ── Placeholder card ──────────────────────────────────────────────── */}
+      <div
+        className="p-8 rounded-sm border text-center"
+        style={{ borderColor: "#0A0A6A", borderStyle: "dashed" }}
+      >
+        <p
+          className="font-body text-sm font-light tracking-wide"
+          style={{ color: "#B8C2D1" }}
+        >
           More systems in development.
         </p>
-        <span style={{
-          display:    "inline-block",
-          width:      20,
-          borderTop:  "1px solid #8892B0",
-          flexShrink: 0,
-        }} />
       </div>
-
     </section>
   );
 }
