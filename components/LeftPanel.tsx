@@ -10,6 +10,7 @@ import React from "react";
 
 import { useActiveSection } from "@/hooks/useActiveSection";
 import MobileNav            from "@/components/MobileNav";
+import ResumeButton         from "@/components/ResumeButton";
 
 /* ── Config ──────────────────────────────────────────────────────────────── */
 const NAV_ITEMS = [
@@ -23,7 +24,7 @@ const SOCIAL_LINKS = [
   {
     label: "Gmail",
     /* Opens Gmail compose in browser — recruiters prefer web over mail apps */
-    href:  "https://mail.google.com/mail/?view=cm&to=reachshivalibajaj@gmail.com&su=Hello%20Shivali",
+    href:  "https://mail.google.com/mail/?view=cm&to=reachshivalibajaj@gmail.com&su=Reaching%20out%20after%20viewing%20your%20portfolio",
     title: "Email via Gmail",
   },
   { label: "GitHub",   href: "https://github.com/shivalibajaj",           title: "GitHub"  },
@@ -189,6 +190,11 @@ export default function LeftPanel() {
         {SOCIAL_LINKS.map(({ label, href, title }) => (
           <SocialIcon key={label} label={label} href={href} title={title} />
         ))}
+      </div>
+
+      {/* Resume download — only on desktop (hidden on mobile via panel-left display:none) */}
+      <div style={{ marginTop: 32 }}>
+        <ResumeButton />
       </div>
     </aside>
   );

@@ -27,12 +27,12 @@ export default function CursorGlow() {
        rAF adds exactly 1 frame (16ms) of latency. For a glow
        that tracks the cursor, direct sync update feels tighter. */
     const onMouseMove = (e: MouseEvent) => {
-      el.style.background = `radial-gradient(500px circle at ${e.clientX}px ${e.clientY}px, rgba(74,158,255,0.12), transparent 80%)`;
+      el.style.background = `radial-gradient(300px circle at ${e.clientX}px ${e.clientY}px, rgba(74,158,255,0.13), transparent 80%)`;
     };
 
     const onTouchMove = (e: TouchEvent) => {
       const t = e.touches[0];
-      el.style.background = `radial-gradient(350px circle at ${t.clientX}px ${t.clientY}px, rgba(74,158,255,0.09), transparent 80%)`;
+      el.style.background = `radial-gradient(250px circle at ${t.clientX}px ${t.clientY}px, rgba(74,158,255,0.10), transparent 80%)`;
     };
 
     const onMouseLeave = () => { el.style.background = "none"; };

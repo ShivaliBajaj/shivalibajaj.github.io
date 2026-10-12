@@ -1,15 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // Static export for GitHub Pages
-  output: "export",
-
-  // GitHub Pages serves at /repo-name — for user pages (shivalibajaj.github.io) it's just /
-  basePath: "",
-
-  // Required for static export — disables server-side image optimization
+  output: "export",        // static export → deploys to GitHub Pages
+  basePath: "",            // root domain: shivalibajaj.github.io
   images: {
-    unoptimized: true,
+    unoptimized: true,     // required for static export
   },
 };
 

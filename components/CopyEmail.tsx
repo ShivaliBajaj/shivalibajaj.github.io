@@ -28,12 +28,12 @@ export default function CopyEmail() {
     setExiting(false);
     setAnnouncement("Email address copied to clipboard");
     setTimeout(() => setAnnouncement(""), 2500);
-    exitTimer.current  = setTimeout(() => setExiting(true), 1800);
+    exitTimer.current  = setTimeout(() => setExiting(true), 3500);
     resetTimer.current = setTimeout(() => {
       setVisible(false);
       setCopied(false);
       setExiting(false);
-    }, 2050);
+    }, 3750);
   };
 
   const fallbackCopy = () => {
