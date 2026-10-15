@@ -5,7 +5,13 @@
    Hover → brightens + shows "Why healthcare?" tooltip.
    Click → card rises with rotating quotes (auto-advances every 4s).
    Click outside or press Escape to dismiss.
-   No over-engineering: pure CSS animation + useState. No deps.             */
+   No over-engineering: pure CSS animation + useState. No deps.
+
+   v1.1 changes:
+   - Drag handle pill: visible on mobile (<768px) only, hidden on desktop
+   - Left accent bar: 2px → 1px (subtler, more clinical)
+   - Indicators: width-expanding dashes → vitals bars (6 vertical bars,
+     varying heights, bottom-aligned — looks like a monitor reading)         */
 
 import { useState, useEffect, useCallback } from "react";
 
@@ -17,6 +23,9 @@ const QUOTES = [
   "There's a difference between a model that performs and a model that helps. I'm interested in the second one.",
   "If I can't explain it to the person it's meant to help, it's not ready.",
 ];
+
+/* Bar heights (px) for vitals indicator — organic variation mimics a reading */
+const BAR_HEIGHTS = [8, 14, 10, 18, 12, 9];
 
 export default function WhyHealthcare() {
   const [open,    setOpen]    = useState(false);
@@ -42,7 +51,7 @@ export default function WhyHealthcare() {
     return () => document.removeEventListener("keydown", handleKey);
   }, [handleKey]);
 
-  const openCard = () => { setIndex(0); setExiting(false); setOpen(true); };
+  const openCard  = () => { setIndex(0); setExiting(false); setOpen(true); };
   const closeCard = () => {
     setExiting(true);
     setTimeout(() => { setOpen(false); setExiting(false); }, 300);
@@ -64,14 +73,11 @@ export default function WhyHealthcare() {
         onMouseEnter={e => (e.currentTarget.style.opacity = "1")}
         onMouseLeave={e => (e.currentTarget.style.opacity = "0.45")}
       >
-        {/* SVG ECG flatline → spike → flatline */}
         <svg width="48" height="18" viewBox="0 0 48 18" fill="none" aria-hidden>
           <polyline
             points="0,9 10,9 13,3 16,15 19,9 22,9 24,9 27,9 48,9"
-            stroke="#4A9EFF"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+            stroke="#4A9EFF" strokeWidth="1.5"
+            strokeLinecap="round" strokeLinejoin="round"
           />
         </svg>
         <span style={{
@@ -106,75 +112,109 @@ export default function WhyHealthcare() {
             role="dialog"
             aria-label="Why I chose healthcare"
             style={{
-              position: "fixed",
-              bottom: exiting ? "-200px" : "0",
-              left: "50%",
-              transform: "translateX(-50%)",
-              zIndex: 201,
-              width: "min(520px, 90vw)",
-              background: "rgba(2,2,71,0.98)",
-              border: "1px solid rgba(74,158,255,0.2)",
-              borderBottom: "none",
-              borderRadius: "16px 16px 0 0",
-              padding: "40px 36px 48px",
+              position:   "fixed",
+              bottom:     exiting ? "-320px" : "0",
+              left:       "50%",
+              transform:  "translateX(-50%)",
+              zIndex:     201,
+              width:      "min(560px, 94vw)",
+              background: "linear-gradient(180deg, #06065C 0%, #020240 100%)",
+              borderTop:   "1px solid rgba(74,158,255,0.18)",
+              borderLeft:  "1px solid rgba(74,158,255,0.07)",
+              borderRight: "1px solid rgba(74,158,255,0.07)",
+              borderBottom:"none",
+              borderRadius:"20px 20px 0 0",
+              padding:    "12px 36px 48px",
               transition: "bottom 0.35s cubic-bezier(0.32,0.72,0,1)",
-              animation: exiting ? "none" : "slideUp 0.35s cubic-bezier(0.32,0.72,0,1) forwards",
+              animation:  exiting ? "none" : "slideUp 0.35s cubic-bezier(0.32,0.72,0,1) forwards",
             }}
           >
-            {/* Close */}
-            <button
-              onClick={closeCard}
-              aria-label="Close"
-              style={{
-                position:"absolute", top:16, right:16,
-                background:"none", border:"none", cursor:"pointer",
-                color:"#8892B0", fontSize:18, lineHeight:1,
-                transition:"color 0.15s ease",
-              }}
-              onMouseEnter={e => (e.currentTarget.style.color="#CCD6F6")}
-              onMouseLeave={e => (e.currentTarget.style.color="#8892B0")}
-            >
-              ✕
-            </button>
+            {/* Drag handle pill — mobile only; hidden ≥768px via injected CSS */}
+            <div className="drag-handle-pill" style={{
+              width: 36, height: 3,
+              background: "rgba(74,158,255,0.22)",
+              borderRadius: 2,
+              margin: "0 auto 28px",
+            }} />
 
-            {/* Label */}
-            <p style={{
-              fontFamily: "'Inter', sans-serif",
-              fontSize: 10, fontWeight: 700,
-              letterSpacing: "0.15em", textTransform: "uppercase",
-              color: "#4A9EFF", margin: "0 0 24px",
+            {/* Header: ECG + label + close */}
+            <div style={{
+              display:        "flex",
+              alignItems:     "center",
+              justifyContent: "space-between",
+              marginBottom:   28,
             }}>
-              Why healthcare?
-            </p>
+              <div style={{ display:"flex", alignItems:"center", gap:10 }}>
+                <svg width="38" height="14" viewBox="0 0 38 14" fill="none" aria-hidden>
+                  <polyline
+                    points="0,7 8,7 11,2 14,12 17,7 20,7 38,7"
+                    stroke="#4A9EFF" strokeWidth="1.4"
+                    strokeLinecap="round" strokeLinejoin="round"
+                  />
+                </svg>
+                <span style={{
+                  fontFamily:    "'Inter', sans-serif",
+                  fontSize:      10, fontWeight: 700,
+                  letterSpacing: "0.15em", textTransform: "uppercase",
+                  color:         "#4A9EFF",
+                }}>
+                  Why healthcare?
+                </span>
+              </div>
 
-            {/* Quote */}
-            <blockquote style={{
-              margin: 0,
-              fontFamily: "'Merriweather', Georgia, serif",
-              fontSize: "clamp(16px, 3vw, 20px)",
-              fontWeight: 300, fontStyle: "italic",
-              lineHeight: 1.75,
-              color: "#CCD6F6",
-              minHeight: 80,
-              transition: "opacity 0.4s ease",
+              <button
+                onClick={closeCard}
+                aria-label="Close"
+                style={{
+                  background:"none", border:"none", cursor:"pointer",
+                  color:"rgba(136,146,176,0.5)", fontSize:16, lineHeight:1,
+                  transition:"color 0.15s ease", padding:"4px 6px",
+                }}
+                onMouseEnter={e => (e.currentTarget.style.color="#CCD6F6")}
+                onMouseLeave={e => (e.currentTarget.style.color="rgba(136,146,176,0.5)")}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Left accent bar — 1px thin (subtler, more clinical feel) */}
+            <div style={{
+              borderLeft: "1px solid rgba(74,158,255,0.28)",
+              paddingLeft: 20,
+              marginBottom: 28,
             }}>
-              {QUOTES[index]}
-            </blockquote>
+              <blockquote style={{
+                margin:     0,
+                fontFamily: "'Merriweather', Georgia, serif",
+                fontSize:   "clamp(15px, 2.8vw, 18px)",
+                fontWeight: 300, fontStyle: "italic",
+                lineHeight: 1.85,
+                color:      "#CCD6F6",
+                minHeight:  72,
+                transition: "opacity 0.4s ease",
+              }}>
+                {QUOTES[index]}
+              </blockquote>
+            </div>
 
-            {/* Dot indicators */}
-            <div style={{ display:"flex", gap:8, marginTop:28 }}>
-              {QUOTES.map((_, i) => (
+            {/* Vitals bars — 6 vertical bars, bottom-aligned, varying heights.
+                Active bar = solid blue; inactive = dim ghost.
+                Clicking any bar jumps to that quote.                        */}
+            <div style={{ display:"flex", gap: 6, alignItems: "flex-end" }}>
+              {BAR_HEIGHTS.map((h, i) => (
                 <button
                   key={i}
                   onClick={() => setIndex(i)}
                   aria-label={`Quote ${i + 1}`}
                   style={{
-                    width: i === index ? 20 : 6,
-                    height: 6, borderRadius: 3,
-                    background: i === index ? "#4A9EFF" : "rgba(74,158,255,0.25)",
-                    border: "none", cursor: "pointer",
-                    transition: "width 0.3s ease, background 0.3s ease",
-                    padding: 0,
+                    width:        4,
+                    height:       h,
+                    borderRadius: 2,
+                    background:   i === index ? "#4A9EFF" : "rgba(74,158,255,0.18)",
+                    border:       "none", cursor: "pointer",
+                    transition:   "background 0.3s ease",
+                    padding:      0,
+                    flexShrink:   0,
                   }}
                 />
               ))}
@@ -183,11 +223,13 @@ export default function WhyHealthcare() {
         </>
       )}
 
-      {/* Keyframe animations */}
+      {/* Keyframe animations + drag handle responsive rule */}
       <style>{`
         @keyframes fadeIn  { from { opacity:0 } to { opacity:1 } }
         @keyframes fadeOut { from { opacity:1 } to { opacity:0 } }
         @keyframes slideUp { from { transform:translateX(-50%) translateY(100%) } to { transform:translateX(-50%) translateY(0) } }
+        .drag-handle-pill { display: block; }
+        @media (min-width: 768px) { .drag-handle-pill { display: none; } }
       `}</style>
     </>
   );
