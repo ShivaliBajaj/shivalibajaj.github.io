@@ -193,7 +193,7 @@ export default function RootLayout({
             "default-src 'self'",
             /* unsafe-eval needed by React in development (Turbopack).
                In production React never uses eval — this is safe.        */
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://gc.zgo.at",
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: https:",
             "font-src 'self'",
@@ -218,6 +218,14 @@ export default function RootLayout({
             "usb=()",
             "interest-cohort=()",
           ].join(", ")}
+        />
+                {/* ── Analytics: GoatCounter ───────────────────────────────────────
+            Privacy-friendly, no cookies, no personal data collected.
+            async → non-blocking, loads after page is interactive.          */}
+        <script
+          data-goatcounter="https://shivalibajaj.goatcounter.com/count"
+          async
+          src="//gc.zgo.at/count.js"
         />
       </head>
       <body style={{ backgroundColor: "#00003C" }}>
