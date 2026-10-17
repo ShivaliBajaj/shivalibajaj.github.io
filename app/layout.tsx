@@ -227,6 +227,8 @@ export default function RootLayout({
           async
           src="//gc.zgo.at/count.js"
         />
+        {/* ── Google Search Console verification ───────────────────────── */}
+        <meta name="google-site-verification" content="Qdq64-B1alFua3QfuxNB_TD3RFkK8qnQ-0v_llgBlgo" />
       </head>
       <body style={{ backgroundColor: "#00003C" }}>
         {children}
