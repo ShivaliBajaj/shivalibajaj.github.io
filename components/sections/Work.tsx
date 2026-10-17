@@ -4,9 +4,9 @@
    Structure only in this part (15).
    Content is added in:
    ✅ Part 15 — shell, header, placeholder
-   ⏳ Part 16 — AirAware card
-   ⏳ Part 17 — MindCare card
-   ⏳ Part 18 — hover effects across both cards
+   ✅ Part 16 — AirAware card
+   ✅ Part 17 — MindCare card
+   ✅ Part 18 — hover effects across both cards
 
    Why a two-line section header?
    Brittany's work section has a small label above the main heading —
@@ -17,7 +17,11 @@
    Card layout decision — vertical stack not grid:
    Two cards side-by-side in a grid would make each card too narrow on
    most laptop screens. A vertical stack gives each card full width —
-   more room for the description text and domain chips to breathe.        */
+   more room for the description text and domain chips to breathe.
+
+   v1.1 — "More systems" placeholder:
+   Replaced plain <p> with Option B: left accent bar + faint blue wash.
+   No icon, no text decoration. Just a clean directional signal.            */
 
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { ProjectCard  } from "@/components/ui/ProjectCard";
@@ -76,61 +80,45 @@ export default function Work() {
             marginBottom:  8,
           }}
         >
-          Systems &amp; Analytical Pipelines
+          ML Systems for Clinical Problems
         </p>
 
       </div>
 
-      {/* ── Cards — Parts 16 and 17 render here ─────────────────────────
-          display:flex + flexDirection:column stacks cards vertically.
-          gap:4 — tight spacing between cards; hover border adds
-          visual separation without needing extra margin.                 */}
+      {/* ── Cards stack ─────────────────────────────────────────────────── */}
       <div style={{
         display:       "flex",
         flexDirection: "column",
         gap:           4,
         marginBottom:  4,
       }}>
-        {/* AirAware card — Part 16 ✅ */}
+        {/* AirAware card */}
         <ProjectCard project={PROJECTS[0]} />
 
-        {/* MindCare card — Part 17 ✅ */}
+        {/* MindCare card */}
         <ProjectCard project={PROJECTS[1]} />
       </div>
 
-      {/* ── Placeholder — "More systems in development." ─────────────────
-          Dashed border signals intentional empty space — not a bug.
-          Matches the clinical/research aesthetic: work is ongoing,
-          the portfolio is a living document.                             */}
+      {/* ── "More systems" — Option B: left accent bar + faint blue wash ──
+          No icon, no dash, no decorative prefix.
+          The left bar is the only visual signal — quiet but directional.  */}
       <div style={{
-        display:        "flex",
-        alignItems:     "center",
-        gap:            14,
-        padding:        "18px 20px",
-        borderRadius:   8,
-        border:         "1px dashed rgba(74, 158, 255, 0.15)",
-        marginTop:      4,
+        borderLeft:   "3px solid rgba(74,158,255,0.45)",
+        background:   "rgba(74,158,255,0.04)",
+        borderRadius: "0 4px 4px 0",
+        padding:      "14px 14px 14px 16px",
+        marginTop:    24,
       }}>
-        <span style={{
-          display:    "inline-block",
-          width:      20,
-          borderTop:  "1px solid #8892B0",
-          flexShrink: 0,
-        }} />
         <p style={{
           fontFamily: "'Inter', sans-serif",
+          fontSize:   13,
           fontWeight: 400,
-          color:      "#8892B0",
+          color:      "rgba(136,146,176,0.7)",
           margin:     0,
+          letterSpacing: "0.01em",
         }}>
-          More systems in development.
+          More systems for clinical problems in development
         </p>
-        <span style={{
-          display:    "inline-block",
-          width:      20,
-          borderTop:  "1px solid #8892B0",
-          flexShrink: 0,
-        }} />
       </div>
 
     </section>
