@@ -13,6 +13,7 @@ import ScrollProgress  from "@/components/ScrollProgress";
 import LeftPanel       from "@/components/LeftPanel";
 import About         from "@/components/sections/About";
 import Work          from "@/components/sections/Work";
+import TechStack     from "@/components/sections/TechStack";
 import HowIThink     from "@/components/sections/HowIThink";
 import Contact       from "@/components/sections/Contact";
 
@@ -47,6 +48,7 @@ export default function Page() {
         <main className="panel-right">
           <About     />
           <Work      />
+          <TechStack />
           <HowIThink />
           <Contact   />
         </main>
