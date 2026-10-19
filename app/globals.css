@@ -790,3 +790,111 @@ body > div {
     padding: 12px 12px;
   }
 }
+
+/* ─── Print styles ───────────────────────────────────────────────────────────
+   Triggered when the page is printed or saved as PDF via browser.
+   Goals:
+   1. White background — dark navy wastes printer ink
+   2. Dark readable text — navy palette is unreadable on white paper
+   3. Single column — sticky two-column layout doesn't make sense on paper
+   4. Hide decorative UI — cursor glow, scroll progress, loading screen
+   5. Show link URLs — so printed version has actual clickable references    */
+
+@media print {
+
+  /* ── Reset background and text to print-safe colours ── */
+  :root {
+    --bg:     #ffffff;
+    --text:   #0d0d1a;
+    --muted:  #44475a;
+    --accent: #1a56a0;   /* darker blue — readable on white */
+  }
+
+  body {
+    background-color: #ffffff !important;
+    color:            #0d0d1a !important;
+    font-size:        12pt;
+    line-height:      1.6;
+  }
+
+  /* ── Hide decorative / interactive elements ── */
+  /* Loading screen, cursor glow, scroll progress bar */
+  [class*="LoadingScreen"],
+  [class*="CursorGlow"],
+  [class*="ScrollProgress"] {
+    display: none !important;
+  }
+
+  /* Hide navigation — not useful on paper */
+  .nav-desktop,
+  .mobile-nav {
+    display: none !important;
+  }
+
+  /* ── Single column layout — override two-column shell ── */
+  .layout-shell {
+    display:   block;   /* single column */
+    max-width: 100%;
+    padding:   0 24pt;
+    margin:    0;
+  }
+
+  .panel-left {
+    position:   relative;   /* override sticky */
+    height:     auto;
+    width:      100%;
+    padding:    24pt 0 16pt;
+    border-bottom: 1pt solid #cccccc;
+    margin-bottom: 24pt;
+  }
+
+  .panel-right {
+    padding: 0;
+    width:   100%;
+  }
+
+  /* ── Section spacing — tighter on paper ── */
+  .section-about,
+  .section-work,
+  .section-how-i-think,
+  .section-contact {
+    padding-bottom: 32pt;
+    page-break-inside: avoid;  /* keep each section together if possible */
+  }
+
+  /* ── SectionLabel — visible but lighter ── */
+  .section-label-inner {
+    border-bottom: 1pt solid #cccccc;
+    padding-bottom: 6pt;
+    margin-bottom: 16pt;
+  }
+
+  .section-label-text {
+    color: #1a56a0 !important;
+  }
+
+  /* ── Tag pills — outline on white background ── */
+  .about-tags span,
+  [style*="borderRadius: 9999"] {
+    border-color: rgba(26, 86, 160, 0.4) !important;
+    background:   rgba(26, 86, 160, 0.06) !important;
+    color:        #1a56a0 !important;
+  }
+
+  /* ── Links — show URL after link text ── */
+  a[href^="http"]:after {
+    content:   " (" attr(href) ")";
+    font-size: 9pt;
+    color:     #888888;
+    word-break: break-all;
+  }
+
+  /* ── Remove animations ── */
+  *, *::before, *::after {
+    animation:  none !important;
+    transition: none !important;
+  }
+
+  /* ── Scrollbar hidden on print ── */
+  ::-webkit-scrollbar { display: none; }
+}
