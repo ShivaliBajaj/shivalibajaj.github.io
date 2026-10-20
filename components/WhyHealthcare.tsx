@@ -200,38 +200,42 @@ export default function WhyHealthcare() {
             {/* Vitals bars — 6 vertical bars, bottom-aligned, varying heights.
                 Active bar = solid blue; inactive = dim ghost.
                 Clicking any bar jumps to that quote.                        */}
-            <div style={{ display:"flex", gap: 6, alignItems: "flex-end" }}>
-              {BAR_HEIGHTS.map((h, i) => (
-                <button
-                  key={i}
-                  onClick={() => setIndex(i)}
-                  aria-label={`Quote ${i + 1}`}
-                  style={{
-                    width:        4,
-                    height:       h,
-                    borderRadius: 2,
-                    background:   i === index ? "#4A9EFF" : "rgba(74,158,255,0.18)",
-                    border:       "none", cursor: "pointer",
-                    transition:   "background 0.3s ease",
-                    padding:      0,
-                    flexShrink:   0,
-                  }}
-                />
-              ))}
+                        {/* Vitals bars (left) + Esc hint (right) — same row */}
+            <div style={{ display:"flex", alignItems:"flex-end", justifyContent:"space-between" }}>
+
+              {/* Vitals bars */}
+              <div style={{ display:"flex", gap: 6, alignItems: "flex-end" }}>
+                {BAR_HEIGHTS.map((h, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setIndex(i)}
+                    aria-label={`Quote ${i + 1}`}
+                    style={{
+                      width:        4,
+                      height:       h,
+                      borderRadius: 2,
+                      background:   i === index ? "#4A9EFF" : "rgba(74,158,255,0.18)",
+                      border:       "none", cursor: "pointer",
+                      transition:   "background 0.3s ease",
+                      padding:      0,
+                      flexShrink:   0,
+                    }}
+                  />
+                ))}
+              </div>
+
+              {/* Esc hint */}
+              <p style={{
+                fontFamily:    "'Inter', sans-serif",
+                fontSize:      10,
+                color:         "rgba(136,146,176,0.35)",
+                letterSpacing: "0.08em",
+                margin:        0,
+              }}>
+                Press <kbd style={{ fontFamily: "monospace", background: "rgba(74,158,255,0.08)", border: "1px solid rgba(74,158,255,0.15)", borderRadius: 3, padding: "1px 5px" }}>Esc</kbd> to close
+              </p>
+
             </div>
-                        {/* Keyboard hint */}
-            <p style={{
-              fontFamily:    "'Inter', sans-serif",
-              fontSize:      10,
-              color:         "rgba(136,146,176,0.35)",
-              letterSpacing: "0.08em",
-              textAlign:     "center",
-              marginTop:     16,
-              marginBottom:  0,
-            }}>
-              Press <kbd style={{ fontFamily: "monospace", background: "rgba(74,158,255,0.08)", border: "1px solid rgba(74,158,255,0.15)", borderRadius: 3, padding: "1px 5px" }}>Esc</kbd> to close
-            </p>
-          </div>
         </>
       )}
 
