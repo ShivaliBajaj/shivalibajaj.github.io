@@ -43,6 +43,7 @@ export const metadata: Metadata = {
     "Environmental Health Analytics",
     "AirAware",
     "MindCare",
+    "Shivali Bajaj"    
   ],
 
   /* author.url connects this page to the GitHub identity */
@@ -219,7 +220,7 @@ export default function RootLayout({
             "interest-cohort=()",
           ].join(", ")}
         />
-                {/* ── Analytics: GoatCounter ───────────────────────────────────────
+         {/* ── Analytics: GoatCounter ──
             Privacy-friendly, no cookies, no personal data collected.
             async → non-blocking, loads after page is interactive.          */}
         <script
@@ -229,6 +230,33 @@ export default function RootLayout({
         />
         {/* ── Google Search Console verification ───────────────────────── */}
         <meta name="google-site-verification" content="Qdq64-B1alFua3QfuxNB_TD3RFkK8qnQ-0v_llgBlgo" />
+
+        {/* ── JSON-LD: Person schema ────────────────────────────────────────
+            Structured data for Google — not visible to visitors.
+            Tells Google this is a real person's portfolio with verified links.
+            Enables rich snippets in search results.                           */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type":    "Person",
+              name:        "Shivali Bajaj",
+              url:         "https://shivalibajaj.github.io",
+              jobTitle:    "Medical Data Scientist",
+              description: "Medical Data Scientist building clinically aware AI systems in healthcare NLP and medical imaging. Based in India.",
+              address: {
+                "@type":         "PostalAddress",
+                addressLocality: "Indore",
+                addressCountry:  "IN",
+              },
+              sameAs: [
+                "https://github.com/shivalibajaj",
+                "https://linkedin.com/in/reachshivalibajaj",
+              ],
+            }),
+          }}
+        />
       </head>
       <body style={{ backgroundColor: "#00003C" }}>
         {children}
