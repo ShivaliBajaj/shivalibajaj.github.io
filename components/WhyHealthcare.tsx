@@ -219,6 +219,18 @@ export default function WhyHealthcare() {
                 />
               ))}
             </div>
+                        {/* Keyboard hint */}
+            <p style={{
+              fontFamily:    "'Inter', sans-serif",
+              fontSize:      10,
+              color:         "rgba(136,146,176,0.35)",
+              letterSpacing: "0.08em",
+              textAlign:     "center",
+              marginTop:     16,
+              marginBottom:  0,
+            }}>
+              Press <kbd style={{ fontFamily: "monospace", background: "rgba(74,158,255,0.08)", border: "1px solid rgba(74,158,255,0.15)", borderRadius: 3, padding: "1px 5px" }}>Esc</kbd> to close
+            </p>
           </div>
         </>
       )}
