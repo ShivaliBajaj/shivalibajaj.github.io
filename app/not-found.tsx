@@ -32,7 +32,7 @@ export default function NotFound() {
         onMouseEnter={e => { e.currentTarget.style.background="rgba(74,158,255,0.12)"; e.currentTarget.style.borderColor="rgba(74,158,255,0.5)"; }}
         onMouseLeave={e => { e.currentTarget.style.background="rgba(74,158,255,0.06)"; e.currentTarget.style.borderColor="rgba(74,158,255,0.3)"; }}
       >
-        ← Return to portfolio
+        <span style={{ fontSize:18, lineHeight:1, marginRight:8 }}>⟵</span>Return to portfolio
       </a>
 
       {/* Footer — human, not job-title heavy */}
