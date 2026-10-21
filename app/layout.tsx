@@ -198,8 +198,7 @@ export default function RootLayout({
             "style-src 'self' 'unsafe-inline'",
             "img-src 'self' data: https:",
             "font-src 'self'",
-            "connect-src 'self'",
-            "frame-ancestors 'none'",
+            "connect-src 'self' https://gc.zgo.at https://shivalibajaj.goatcounter.com",
             "base-uri 'self'",
             "form-action 'self'",
           ].join("; ")}
