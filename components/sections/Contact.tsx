@@ -269,10 +269,6 @@ export default function Contact() {
           <FooterLink href="https://nextjs.org/">
             Next.js
           </FooterLink>
-          ,{" "}
-          <FooterLink href="https://tailwindcss.com/">
-            Tailwind CSS
-          </FooterLink>
           {" "}&amp;{" "}
           <FooterLink href="https://www.typescriptlang.org/">
             TypeScript
