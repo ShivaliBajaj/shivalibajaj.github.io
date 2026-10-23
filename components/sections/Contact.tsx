@@ -285,6 +285,16 @@ export default function Contact() {
         <div style={{ marginTop: 24 }}>
           <WhyHealthcare />
         </div>
+        {/* Copyright */}
+        <p style={{
+          fontFamily: "'Inter', sans-serif",
+          fontSize: 11,
+          color: "rgba(136, 146, 176, 0.35)",
+          marginTop: 16,
+          marginBottom: 0,
+        }}>
+          © {new Date().getFullYear()} Shivali Bajaj
+        </p>
       </div>
 
     </section>
