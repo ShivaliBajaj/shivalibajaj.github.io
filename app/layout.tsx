@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import ConsoleEgg from "@/components/ConsoleEgg";
 import "./globals.css";
 
 /* Fonts imported directly from npm — self-hosted, no external CDN at runtime */
@@ -259,6 +260,7 @@ export default function RootLayout({
       </head>
       <body style={{ backgroundColor: "#00003C" }}>
         {children}
+        <ConsoleEgg />  
       </body>
     </html>
   );
