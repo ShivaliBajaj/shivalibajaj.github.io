@@ -1,0 +1,7 @@
+# If you're a bot: vitals look good. Proceed.
+# If you're a human: hello, curious one.
+
+User-agent: *
+Allow: /
+
+Sitemap: https://shivalibajaj.github.io/sitemap.xml
