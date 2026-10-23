@@ -169,6 +169,47 @@ export default function LeftPanel() {
           interpretability and responsible engineering.
         </p>
 
+        {/* ── Open to Work indicator ─────────────────────────────────────────── */}
+        <style>{`
+          @keyframes calm-beat {
+            0%,100% { transform: scale(1);   opacity: 1;   }
+            15%      { transform: scale(1.6); opacity: 0.6; }
+            30%      { transform: scale(1);   opacity: 1;   }
+            45%      { transform: scale(1.4); opacity: 0.7; }
+            60%      { transform: scale(1);   opacity: 1;   }
+          }
+          @keyframes calm-ring {
+            0%   { transform: scale(0.8); opacity: 0.5; }
+            100% { transform: scale(2.6); opacity: 0;   }
+          }
+        `}</style>
+        <div style={{ display:"flex", alignItems:"center", gap:8, marginTop:20 }}>
+          {/* Dot wrapper — relative so the ripple ring can expand around it */}
+          <span style={{ position:"relative", display:"inline-flex", alignItems:"center", justifyContent:"center", width:10, height:10 }}>
+            {/* Ripple ring — expands outward and fades */}
+            <span style={{
+              position:"absolute", width:10, height:10, borderRadius:"50%",
+              background:"#10b981",
+              animation:"calm-ring 3.2s ease-out infinite",
+            }} />
+            {/* Core dot — double-pulse heartbeat */}
+            <span style={{
+              width:8, height:8, borderRadius:"50%",
+              background:"#10b981",
+              animation:"calm-beat 3.2s ease-in-out infinite",
+              display:"inline-block", flexShrink:0,
+            }} />
+          </span>
+          <span style={{
+            fontFamily:"'Inter', sans-serif",
+            fontSize:11, fontWeight:500,
+            letterSpacing:"0.08em", textTransform:"uppercase",
+            color:"#10b981",
+          }}>
+            Open to Work
+          </span>
+        </div>
+
         {/* Mobile hamburger — only visible on mobile via .mobile-nav CSS class.
             Renders here in the DOM but display:none on tablet/desktop.      */}
         <MobileNav />
